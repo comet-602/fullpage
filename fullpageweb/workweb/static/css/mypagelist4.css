@@ -1,0 +1,53 @@
+#sec4_box4 {
+  position: absolute;
+  top: 140px;
+  left: 15%;
+  width: 50%;
+  height: 45%;
+  border-width: 2px;
+  border-style: solid;
+}
+
+#sec4_pre1 {
+  position: absolute;
+  top: 150px;
+  right: 22%;
+  width: 10%;
+  height: 10%;
+  border-width: 2px;
+  border-style: solid;
+}
+
+#sec4_pre2 {
+  position: absolute;
+  top: 300px;
+  right: 22%;
+  width: 10%;
+  height: 10%;
+  border-width: 2px;
+  border-style: solid;
+}
+
+#sec4_pre3 {
+  position: absolute;
+  top: 450px;
+  right: 22%;
+  width: 10%;
+  height: 10%;
+  border-width: 2px;
+  border-style: solid;
+}
+
+#myprebtn {
+  position: absolute;
+  bottom: 20%;
+  left: 70%;
+  margin-left: -50%;    
+}
+
+#myprebtn button {
+  
+  display: inline-block;
+  width: 5vw;
+  height: 10vh;
+}
