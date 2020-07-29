@@ -35,6 +35,7 @@ def text(request):
     c=a+b
     return HttpResponse(c)
 # =============================================================================
+
 # webcam路徑
 def photo(request):
 
@@ -49,7 +50,7 @@ def photo(request):
     res = requests.get(url, headers=headers)  # 取得影像的api，獲得影像擷取的url
 
     json_data = json.loads(res.text)   # flask api 回傳的資料
-    print("第一次:", json_data)
+    #print("第一次:", json_data)
     return JsonResponse(json_data)
 
 # 預測路徑
@@ -63,38 +64,17 @@ def photo_post(request):
     }
 
     #測試用lask api，需開啟自己的api
-    #url_post = "http://127.0.0.1:5000/post"
+    url_post = "http://127.0.0.1:5000/post"
 
     #遠端預測機台
-    url_post = "http://10.120.26.240:5000/post"
+    #url_post = "http://10.120.26.240:5000/post"
+
     res_post = requests.post(url_post, headers=headers, json=json_photo_post)  # 使用回傳的資料進行另一網路的request post，資料以json格式傳送
     json_data_post = json.loads(res_post.text)  # 得到post後傳回的資料(字串格式)用loads轉字典
 
     return JsonResponse(json_data_post)  # 同等於return HttpResponse(json.dumps(json_data))
 
 # =============================================================================
-
-# # 影像連結用
-# def web_video_url(request):
-#     ##url = "http://10.120.26.222:5000/pic/motion/lastsnap.jpg"
-#     url = "http://10.120.26.222:5000/snapshot"
-#     headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.61 Safari/537.36',}
-#     res = requests.get(url, headers=headers)
-#     json_data = json.loads(res.text)
-#     print(json_data)
-#     return HttpResponse(json.dumps(json_data))
-#
-#
-# def web_img_url(request):
-#     # url="https://jsonplaceholder.typicode.com/posts/42"
-#     #url = "http://127.0.0.1:8080/fooddata/?format=json"
-#     url = "http://localhost:5000/avengers/all"
-#     headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.61 Safari/537.36',}
-#     res = requests.get(url, headers=headers)
-#     json_data = json.loads(res.text)
-#     return HttpResponse(json.dumps(json_data))
-# =============================================================================
-
 
 def food_table(*args, **kwargs):
     labels = ["青江白菜","蘆筍","奇異果","西瓜","草菇","溼香菇","火龍果","甘藍","竹筍","香蕉",]
@@ -138,7 +118,7 @@ def get_data1(request):
     df = pd.read_csv("./食物營養素.csv",index_col="name")  # 讀取csv並指定name欄位為索引值
     df_json = df.to_json(orient="values",force_ascii=False)  # 將dataframe轉為json格式
     json_data = json.loads(df_json)
-    print("json_data:",json_data)
+    #print("json_data:",json_data)
     labels = food_nutrients_table()
 
     if request.is_ajax() and request.method == "POST":
@@ -179,4 +159,55 @@ def get_data1(request):
         return print("It's get")
 
 # =============================================================================
+
+# 預測價格
+
+url_post = "http://127.0.0.1:5000/price"
+headers = {
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.89 Safari/537.36"
+    }
+
+
+def price_pre(request):
+    if request.is_ajax() and request.method == "POST":
+        name = request.POST.get("name")
+
+        furit_list=["a","b","c","d","e","f","g","h","i","j"]  #設定水果list
+
+        # 若post進來的水果有在list內則取出該水果代入
+        if name in furit_list:           
+            data={"name":name}
+            res_post = requests.post(url_post, headers=headers, json=data)
+            json_data_post = json.loads(res_post.text)  
+            return JsonResponse(json_data_post)
+
+
+
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

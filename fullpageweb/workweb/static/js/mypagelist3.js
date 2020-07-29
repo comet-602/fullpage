@@ -1,14 +1,3 @@
-//獲取預測水果資料
-//$(function(){
-//        $("#s3_predic_update").click(function(){
-//            $.getJSON("show_food",function(data){       //getJSON傳回一個物件，不需再用JSON.parse轉物件
-//                labels = data.labels
-//                defaultData = data.data
-//                defaultbackgroundColor = data.backgroundColor
-//                setChart_food()
-//            });
-//        });
-//    });
 
 //$(function(){
 //    //图片数组bai
@@ -26,7 +15,6 @@
 //       } 
 //    } 
 //})
-
 
 
 
