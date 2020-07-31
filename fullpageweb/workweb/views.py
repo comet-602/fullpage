@@ -48,7 +48,7 @@ def photo(request):
     headers = {
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.89 Safari/537.36"}
     res = requests.get(url, headers=headers)  # 取得影像的api，獲得影像擷取的url
-
+    time.sleep(3)
     json_data = json.loads(res.text)   # flask api 回傳的資料
     #print("第一次:", json_data)
     return JsonResponse(json_data)
@@ -162,7 +162,12 @@ def get_data1(request):
 
 # 預測價格
 
-url_post = "http://127.0.0.1:5000/price"
+#遠端預測機台
+url_post = "http://10.120.26.19:5000/price"
+
+
+#測試用lask api，需開啟自己的api
+# url_post = "http://localhost:5000/price"
 headers = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.89 Safari/537.36"
     }
@@ -171,14 +176,15 @@ headers = {
 def price_pre(request):
     if request.is_ajax() and request.method == "POST":
         name = request.POST.get("name")
-
+        print(name)
         furit_list=["a","b","c","d","e","f","g","h","i","j"]  #設定水果list
 
         # 若post進來的水果有在list內則取出該水果代入
         if name in furit_list:           
             data={"name":name}
             res_post = requests.post(url_post, headers=headers, json=data)
-            json_data_post = json.loads(res_post.text)  
+            json_data_post = json.loads(res_post.text)
+            print(json_data_post)
             return JsonResponse(json_data_post)
 
 

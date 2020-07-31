@@ -1,4 +1,4 @@
-from flask import Flask,jsonify,request,render_template,Response
+from flask import Flask, jsonify, request, render_template, Response
 import json
 import requests
 import shutil
@@ -7,7 +7,8 @@ import datetime
 from PIL import Image
 import base64
 
-app=Flask(__name__)
+app = Flask(__name__)
+
 
 @app.route('/')
 def hellFlask():
@@ -46,15 +47,14 @@ def img():
         print("img_url:", img_url)
         nim4.save(img_url)
 
-
         outStr = '<img src="/static/fileout' + time + '.png">'
         print_img_url = img_url.split('/')[-1]
         print(print_img_url)
         print("outStr:", outStr)
         return print_img_url
 
-    except Exception as e :
-        print(e,"\n 下載失敗")
+    except Exception as e:
+        print(e, "\n 下載失敗")
 
 
 @app.route('/post', methods=['POST'])
@@ -67,15 +67,11 @@ def hellFlask_post():
     return jsonify(update_result)
 
 
-
-
 def price_pre():
-
 
     if request.method == "POST":
         data = request.get_json()
-        name=data['name']
-
+        name = data['name']
 
         if name == "a":
             content = {
@@ -121,7 +117,7 @@ def price_pre():
                 'pre_img_url': "./static/img/5.png",
             }
             return jsonify(content)
-        
+
         elif name == "f":
             content = {
                 'price1': "price_f1",
@@ -130,7 +126,7 @@ def price_pre():
                 'pre_img_url': "./static/img/6.png",
             }
             return jsonify(content)
-        
+
         elif name == "g":
             content = {
                 'price1': "price_g1",
@@ -170,22 +166,11 @@ def price_pre():
 
 @app.route('/price', methods=['POST'])
 def price_pre_post():
-    ss=price_pre()
+    ss = price_pre()
     print(ss)
     return ss
 
 
-
-
-
-
-
-
-
-
-
-
-
-#加上'debug=True' 不須重新啟動即可更新資料
-if __name__=='__main__':
-    app.run(debug=True,host='0.0.0.0',port=5000)
+# 加上'debug=True' 不須重新啟動即可更新資料
+if __name__ == '__main__':
+    app.run(debug=True, host='0.0.0.0', port=5000)
