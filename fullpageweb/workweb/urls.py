@@ -20,5 +20,7 @@ urlpatterns = [
     
     path('price_pre', views.price_pre, name='price_pre'),
 
+
+
 ]
 urlpatterns += static('/upload/', document_root=settings.MEDIA_ROOT)

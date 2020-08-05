@@ -9,7 +9,8 @@ function get_price(fruit_type){
         dataType: 'json',
         success: function(data){
             $("#sec4_box4").html("");
-            $("#sec4_box4").attr("src", data.pre_img_url_t);
+            $("#sec4_box4").attr("src", data.pre_img_url_y);
+            $("#sec4_box5").attr("src", data.pre_img_url_t);
             $("#sec4_pre1").html("");  
             $("#sec4_pre1").append("預測值為:" + data.price1);
             $("#sec4_pre2").html("");  

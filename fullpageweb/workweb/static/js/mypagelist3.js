@@ -37,9 +37,22 @@ $(function setChart_food(){
             },
             options: {
                 scales: {
+                    xAxes: [{
+                        ticks: {
+                            beginAtZero:true   //y軸刻度從0開始
+                        },
+                        gridLines:{
+                            show:true,
+                            color:"#636363"
+                        }
+                    }],
                     yAxes: [{
                         ticks: {
                             beginAtZero:true   //y軸刻度從0開始
+                        },
+                        gridLines:{
+                            show:true,
+                            color:"#636363"
                         }
                     }]
                 },
@@ -65,9 +78,22 @@ function setChart_food(){
             },
             options: {
                 scales: {
+                    xAxes: [{
+                        ticks: {
+                            beginAtZero:true   //y軸刻度從0開始
+                        },
+                        gridLines:{
+                            show:true,
+                            color:"#636363"
+                        }
+                    }],
                     yAxes: [{
                         ticks: {
                             beginAtZero:true   //y軸刻度從0開始
+                        },
+                        gridLines:{
+                            show:true,
+                            color:"#636363"
                         }
                     }]
                 },
@@ -194,11 +220,25 @@ $(function sss(){
         },
         options: {
                     scales: {
-                        yAxes: [{
+                        xAxes: [{
                             ticks: {
                                 beginAtZero:true   //y軸刻度從0開始
                             },
-                            stacked: true          //堆疊圖
+                            stacked: true,
+                            gridLines:{
+                                show:true,
+                                color:"#636363"
+                            }
+                        }],
+                        yAxes: [{
+                            ticks: {
+                                beginAtZero:true   //y軸刻度從0開始                            
+                            },
+                            stacked: true,
+                            gridLines:{
+                                show:true,
+                                color:"#636363"
+                            }
                         }]
                     },
                     legend:{                       //圖例
@@ -367,11 +407,25 @@ function sss(){
         },
         options: {
                     scales: {
-                        yAxes: [{
+                        xAxes: [{
                             ticks: {
                                 beginAtZero:true   //y軸刻度從0開始
                             },
-                            stacked: true          //堆疊圖
+                            stacked: true,
+                            gridLines:{
+                                show:true,
+                                color:"#636363"
+                            }
+                        }],
+                        yAxes: [{
+                            ticks: {
+                                beginAtZero:true   //y軸刻度從0開始                            
+                            },
+                            stacked: true,
+                            gridLines:{
+                                show:true,
+                                color:"#636363"
+                            }
                         }]
                     },
                     legend:{                       //圖例
@@ -955,11 +1009,23 @@ $(function setChart(){
             },
             options: {
                 scales: {
+                    xAxes: [{
+                        ticks: {
+                            beginAtZero:true   //y軸刻度從0開始
+                        },
+                        gridLines:{
+                            show:true,
+                            color:"#636363"
+                        }
+                    }],
                     yAxes: [{
                         ticks: {
                             beginAtZero:true   //y軸刻度從0開始
                         },
-                        stacked: true          //堆疊圖
+                        gridLines:{
+                            show:true,
+                            color:"#636363"
+                        }
                     }]
                 },
                 legend:{                       //圖例
@@ -1066,11 +1132,23 @@ function setChart(){
             },
             options: {
                 scales: {
+                    xAxes: [{
+                        ticks: {
+                            beginAtZero:true   //y軸刻度從0開始
+                        },
+                        gridLines:{
+                            show:true,
+                            color:"#636363"
+                        }
+                    }],
                     yAxes: [{
                         ticks: {
                             beginAtZero:true   //y軸刻度從0開始
                         },
-                        stacked: true          //堆疊圖
+                        gridLines:{
+                            show:true,
+                            color:"#636363"
+                        }
                     }]
                 },
                 legend:{                       //圖例
@@ -1094,81 +1172,28 @@ $(function(){
 })
 
 
-
-
-////取得標準營養素資料
-//$(function(){
-//    $.ajax({
-//        method: 'GET',
-//        url: 'get_data',
-//        success: function(data){
-//            labels = data.labels
-//            defaultData = data.data
-//            console.log("get_defaultData",defaultData)
-//            defaultbackgroundColor = data.backgroundColor
-//        },
-//        error: function(error_data){
-//            console.log('error');
-//        }
-//    });
-//});
-
-
-////取得目前營養素資料
-//$(function(){
-//    $.ajax({
-//        method: 'GET',
-//        url: 'get_data1',
-//        success: function(data){
-//            console.log("目前營養素資料:",data)
-//            labels = data.labels
-//            defaultData1 = data.data
-//            console.log("get_defaultData1",defaultData1)
-//            defaultbackgroundColor1 = data.backgroundColor
-//            setChart()
-//        },
-//        error: function(error_data){
-//            console.log('error');
-//        }
-//    });
-//});
-
-
 // ================================================================================================
 
 
+//獲取推薦資料
+function get_sug(){
+    $.ajax({
+        method: 'GET',
+        url: 'suggest',
+        success: function(data){
+            console.log('iggggggggget')
+            $("#s3_suggest").html("");  // 覆蓋當前物件
+            $("#s3_suggest").append("結果為:" + data.name);  //追加當前物件
+        },
+        error: function(error_data){
+            console.log('error');
+        }
+    });
+};
 
-//解析json
-//$(function(){
-//        $.getJSON("show_food",function(ret){
-//            $.each(ret, function(i, item) {
-//            console.log(item.name);
-//            $("#s3_box1").append(item.name+"<br>");
-//		});
-//	});
-//});
 
-//$(function(){
-//        $.getJSON("show_food_compare",function(ret){
-//            $.each(ret, function(i, item) {
-//            console.log(item.name);
-//            $("#s3_box2").append(item.name+"<br>");
-//		});
-//	});
-//});
-
-//$(function(){
-//        $.getJSON("show_food_compare",function(ret){
-//            $.each(ret, function(i, item) {
-//            console.log(item.name);
-//            $("#s3_box2").append(item.name+"<br>");
-//
-//		});
-//	});
-//	    $.getJSON("show_food",function(ret){
-//            $.each(ret, function(i, item) {
-//            console.log(item.name);
-//            $("#s3_box2").append(item.name+"<br>");
-//		});
-//	});
-//});
+$(function(){
+    $("#s3_suggest_button1").click(function() {
+        get_sug()
+    });
+});

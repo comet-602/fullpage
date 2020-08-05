@@ -4,9 +4,29 @@
     top: 8%;
     width:100%;
     height:46%;
-    background:	#808080;
+    #background:	#808080;
     z-index:0;
+    background: linear-gradient(90deg, rgba(187, 145, 133, 1)25%, rgba(255, 231, 198, 0.8)78%);
+    background: -moz-linear-gradient(90deg, rgba(187, 145, 133, 1)25%, rgba(255, 231, 198, 0.8)78%);
+    background: -webkit-linear-gradient(90deg, rgba(187, 145, 133, 1)25%, rgba(255, 231, 198, 0.8)78%);
+    background: -o-linear-gradient(90deg, rgba(187, 145, 133, 1)25%, rgba(255, 231, 198, 0.8)78%);
 }
+
+/* 分層桌布 */
+#s3_background_1 {
+    position:absolute;
+    top: 54%;
+    width:100%;
+    height:46%;
+    #background:	#808080;
+    z-index:0;
+    background: linear-gradient(270deg, rgba(113, 164, 88, 0.7)25%, rgba(255, 254, 198, 0.8)78%);
+    background: -moz-linear-gradient(270deg, rgba(113, 164, 88, 0.7)25%, rgba(255, 254, 198, 0.8)78%);
+    background: -webkit-linear-gradient(270deg, rgba(113, 164, 88, 0.7)25%, rgba(255, 254, 198, 0.8)78%);
+    background: -o-linear-gradient(270deg, rgba(113, 164, 88, 0.7)25%, rgba(255, 254, 198, 0.8)78%);
+}
+
+
 
 
 

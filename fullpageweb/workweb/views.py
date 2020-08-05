@@ -48,9 +48,8 @@ def photo(request):
     headers = {
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.89 Safari/537.36"}
     res = requests.get(url, headers=headers)  # 取得影像的api，獲得影像擷取的url
-    time.sleep(3)
     json_data = json.loads(res.text)   # flask api 回傳的資料
-    #print("第一次:", json_data)
+    # print("第一次:", json_data)
     return JsonResponse(json_data)
 
 # 預測路徑
@@ -82,7 +81,7 @@ def food_table(*args, **kwargs):
 
 
 def show_food(request, *args, **kwargs):
-    data = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+    data = [1, 2, 7, 4, 5, 6, 0, 8, 5, 2]
     # random.shuffle(data)
     labels = food_table()
     content = {
@@ -118,24 +117,29 @@ def get_data1(request):
     df = pd.read_csv("./食物營養素.csv",index_col="name")  # 讀取csv並指定name欄位為索引值
     df_json = df.to_json(orient="values",force_ascii=False)  # 將dataframe轉為json格式
     json_data = json.loads(df_json)
-    #print("json_data:",json_data)
     labels = food_nutrients_table()
 
+    # 判斷年齡層
     if request.is_ajax() and request.method == "POST":
         name = request.POST.get("name")
         if name == "7-9":
             # food_num = [0.4, 6.25, 1.45, 0.04, 1, 1, 0.33, 0.07, 0.33, 1]
             food_num = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
-            data = []
-            for i in range(10):
-                data_percentage = [(a / b) * food_num[i] * 100 for a, b in
-                                   zip(json_data[i], json_data[10])]  # 考慮水果數量，將現有營養素串列與建議營養素串列相除得到百分比(目前值/建議值)
-                data.append(data_percentage)
+            
+
+            # 考慮水果數量，將現有營養素串列與建議營養素串列相除得到百分比(目前值/建議值)
+            data = [[(a / b) * food_num[i] * 100 for a, b in zip(json_data[i], json_data[10])] for i in range(10)]
+
+            lack_data=[100-data[0][j] for j in range(len(data[0]))]
+            
+            print("data",data[0])
+            print("lack-data",lack_data)
 
             content = {
                 'data': data,
                 'labels': labels,
             }
+                        
             return JsonResponse(content)
 
         elif name == "19-30":
@@ -151,12 +155,13 @@ def get_data1(request):
                 'data': data,
                 'labels': labels,
             }
+
             return JsonResponse(content)
 
         else:
             print("no data")
-    if request.method == "GET":
-        return print("It's get")
+    # if request.method == "GET":
+    #     return print("It's get")
 
 # =============================================================================
 
@@ -189,12 +194,23 @@ def price_pre(request):
 
 
 
-        
+# =============================================================================        
 
 
 
+# def suggest(request):
 
+#     # json_get_d = get_data1(request)
+#     # print('suggest_0:',json_get_d)
+#     # get_suggest = json.loads(json_get_data1.content)
+    
+#     json_get_d = requests.post(get_data1(request))  
+#     print('suggest_0:',json_get_d)
+#     #json_data_post = json.loads(res_post.text)  
+#     # print('suggest_first:',get_suggest[0])
+#     # print('suggest_two:',get_suggest)
 
+#     return JsonResponse({"name":"hahahahah"})
 
 
 
