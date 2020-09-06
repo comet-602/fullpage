@@ -17,7 +17,7 @@ urlpatterns = [
 
     path('get_data', views.get_data, name='get_data'),
     path('get_data1', views.get_data1, name='get_data1'),
-    
+    path('get_num', views.get_num, name='get_num'),
     path('price_pre', views.price_pre, name='price_pre'),
 
 

@@ -765,9 +765,9 @@ $(function(){
 // 按鈕數量變化顯示 ==============================================================================================
 
 function adder1(){
-	var count=$("#num1").text();
-	count=parseInt(count)+1;
-	$("#num1").text(count);
+    var count=$("#num1").text();
+    count=parseInt(count)+1;
+    $("#num1").text(count);    
 }
 
 function minuser1(){
@@ -776,9 +776,10 @@ function minuser1(){
 		count=0;
 	}else{
 		count=parseInt(count)-1;
-	}
-	$("#num1").text(count);
+    }
+    $("#num1").text(count);
 }
+
 
 function adder2(){
 	var count=$("#num2").text();
@@ -1176,12 +1177,39 @@ $(function(){
 
 
 //獲取推薦資料
+
+// function get_num(){
+//     let label_list=[]
+//     let num_list=[]
+//      for (i=1;i<11;i++){
+//         window[`get_label${i}`]= $(`#label${i}`).text();
+//         window[`get_num${i}`] = $(`#num${i}`).text();
+//         label_list.push(window[`get_label${i}`]);
+//         num_list.push(window[`get_num${i}`]);
+//      };
+//     console.log('hello_label:',label_list)
+//     console.log('hello_num:',num_list)
+//     $("#s3_suggest").html("");  // 覆蓋當前物件
+//     $("#s3_suggest").append("結果為:" + data.name);  //追加當前物件
+// };
+
+function get_num(){
+    let num_dict={}
+     for (i=1;i<11;i++){
+        window[`get_label${i}`]= $(`#label${i}`).text();
+        window[`get_num${i}`] = $(`#num${i}`).text();
+        num_dict[window[`get_label${i}`]] = window[`get_num${i}`]
+     };
+    console.log('hello_label:',num_dict)
+    
+
+};
+
 function get_sug(){
     $.ajax({
         method: 'GET',
-        url: 'suggest',
+        url: 'get_num',
         success: function(data){
-            console.log('iggggggggget')
             $("#s3_suggest").html("");  // 覆蓋當前物件
             $("#s3_suggest").append("結果為:" + data.name);  //追加當前物件
         },
@@ -1192,8 +1220,12 @@ function get_sug(){
 };
 
 
+
 $(function(){
     $("#s3_suggest_button1").click(function() {
-        get_sug()
+        // get_sug();
+        get_num();
     });
 });
+
+

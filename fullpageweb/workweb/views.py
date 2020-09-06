@@ -9,6 +9,8 @@ import random
 import pandas as pd
 import base64
 import time
+from bs4 import BeautifulSoup
+
 
 def pagelist(request):
     temp={}
@@ -162,6 +164,48 @@ def get_data1(request):
             print("no data")
     # if request.method == "GET":
     #     return print("It's get")
+
+
+
+
+
+def get_num(request):
+
+    headers = {
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.61 Safari/537.36"
+    }
+
+    #測試用lask api，需開啟自己的api
+    url_price = "http://127.0.0.1:8000/#price"
+    
+    res_get = requests.get(url_price, headers=headers)  # 使用回傳的資料進行另一網路的request post，資料以json格式傳送
+    
+    soup = BeautifulSoup(res_get.text, 'html.parser')
+    
+   
+    num = soup.select('li#num1')[0].text
+    #num = soup.select('label')[0].text
+    print('get num:',num)
+    
+    num_json = {'name':num,'data':'ddddd'}
+    return JsonResponse(num_json)  # 同等於return HttpResponse(json.dumps(json_data))
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 # =============================================================================
 
