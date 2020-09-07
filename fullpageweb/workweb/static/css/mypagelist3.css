@@ -99,12 +99,12 @@
     z-index:1;
 }
 
-/* 推薦說明 */
-#s3_suggest {
+/* 資料上傳 */
+#s3_suggest_update {
     position:absolute;
     top: 57%;
-    right: 2vw;
-    width:30vw;
+    right: 22vw;
+    width:15vw;
     height:25vh;
     border-width: 1px;
     border-style: solid;
@@ -112,6 +112,18 @@
     z-index:1;
 }
 
+/* 資料取得 */
+#s3_suggest_get {
+    position:absolute;
+    top: 57%;
+    right: 3vw;
+    width:15vw;
+    height:25vh;
+    border-width: 1px;
+    border-style: solid;
+    border-color: #808080;
+    z-index:1;
+}
 
 
 
@@ -139,17 +151,17 @@
 }
 
 
-/* 推薦按鈕1 */
+/* 上傳按鈕 */
 #s3_suggest_button1 {
     position:absolute;
     top: 85%;
-    right: 20vw;
+    right: 24vw;
     width: 10vw;
     height:10vh;
     z-index:1;
 }
 
-/* 推薦按鈕2 */
+/* 取得按鈕 */
 #s3_suggest_button2 {
     position:absolute;
     top: 85%;

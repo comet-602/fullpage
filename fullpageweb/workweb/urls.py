@@ -7,9 +7,7 @@ from fullpageweb import settings
 urlpatterns = [
     # http://127.0.0.1:8000/
     path('', views.pagelist, name='pagelist'),
-    path('get', views.get, name='get'),
-    path('add', views.add, name='add'),
-    path('text', views.text, name='text'),
+
     path('photo', views.photo, name='photo'),
     path('photo_post', views.photo_post, name='photo_post'),
 

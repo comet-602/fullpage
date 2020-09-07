@@ -916,6 +916,10 @@ function minuser10(){
 	$("#num10").text(count);
 }
 
+
+
+
+
 // ================================================================================================
 
 var defaultData=std_nutrients_data()
@@ -1176,42 +1180,43 @@ $(function(){
 // ================================================================================================
 
 
-//獲取推薦資料
-
-// function get_num(){
-//     let label_list=[]
-//     let num_list=[]
-//      for (i=1;i<11;i++){
-//         window[`get_label${i}`]= $(`#label${i}`).text();
-//         window[`get_num${i}`] = $(`#num${i}`).text();
-//         label_list.push(window[`get_label${i}`]);
-//         num_list.push(window[`get_num${i}`]);
-//      };
-//     console.log('hello_label:',label_list)
-//     console.log('hello_num:',num_list)
-//     $("#s3_suggest").html("");  // 覆蓋當前物件
-//     $("#s3_suggest").append("結果為:" + data.name);  //追加當前物件
-// };
+//獲得取走各蔬果的數字
 
 function get_num(){
-    let num_dict={}
+    var num_dict={}
+    var num_dict_out={}
+    var num_list=[]
+    var today=new Date().format("Y-m-d H:i:s");
+    $("#s3_suggest_update").html("");
      for (i=1;i<11;i++){
         window[`get_label${i}`]= $(`#label${i}`).text();
         window[`get_num${i}`] = $(`#num${i}`).text();
+        num_dict['date'] = today
         num_dict[window[`get_label${i}`]] = window[`get_num${i}`]
-     };
-    console.log('hello_label:',num_dict)
-    
+        num_list.push(window[`get_label${i}`]);
+        if (window[`get_num${i}`] == 0){
+            continue
+        } else {
+            $("#s3_suggest_update").append(window[`get_label${i}`]+'&nbsp'+parseInt(window[`get_num${i}`])*100+'&nbsp'+'克'+'<br>');
+            num_dict_out[window[`get_label${i}`]] = window[`get_num${i}`]
+        }
+    };
+    console.log('hello_dict:',num_dict_out)
+    return JSON.stringify(num_dict)
 
 };
 
-function get_sug(){
+// 傳送後端
+function get_sug(dict_data){
     $.ajax({
-        method: 'GET',
+        method: 'POST',
         url: 'get_num',
+        data: {
+            "dict": dict_data
+        },
+        dataType: 'json',
         success: function(data){
-            $("#s3_suggest").html("");  // 覆蓋當前物件
-            $("#s3_suggest").append("結果為:" + data.name);  //追加當前物件
+            console.log('i get:',data)
         },
         error: function(error_data){
             console.log('error');
@@ -1219,12 +1224,11 @@ function get_sug(){
     });
 };
 
-
-
+// 按鍵執行
 $(function(){
     $("#s3_suggest_button1").click(function() {
-        // get_sug();
-        get_num();
+        dict_data = get_num()
+        get_sug(dict_data);
     });
 });
 

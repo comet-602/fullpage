@@ -11,6 +11,12 @@ import base64
 import time
 from bs4 import BeautifulSoup
 
+import numpy as np
+import pymysql.cursors
+from sqlalchemy import create_engine
+from sqlalchemy.types import CHAR,INT
+import datetime
+import line_notify
 
 def pagelist(request):
     temp={}
@@ -19,23 +25,6 @@ def pagelist(request):
             temp['gotit'] = 1
     return render(request,'workweb/fullpage.html', temp)
 
-
-def get(request):
-    return render(request, 'workweb/fullpage.html')
-
-
-def add(request):
-    a = request.GET.get('a', 0)
-    b = request.GET.get('b', 0)
-    c = int(a)+int(b)
-    return HttpResponse(str(c))
-
-
-def text(request):
-    a=5
-    b=21
-    c=a+b
-    return HttpResponse(c)
 # =============================================================================
 
 # webcam路徑
@@ -114,8 +103,14 @@ def get_data(request, *args, **kwargs):
     return JsonResponse(content)
 
 
+
+# def lack_nut(data):
+#     print('lack_nut_1:',data['lack_data'])
+#     print('lack_nut_2:',data['labels'])
+#     return 
+
 # 目前營養素
-def get_data1(request):
+def get_data1(request, *args, **kwargs):
     df = pd.read_csv("./食物營養素.csv",index_col="name")  # 讀取csv並指定name欄位為索引值
     df_json = df.to_json(orient="values",force_ascii=False)  # 將dataframe轉為json格式
     json_data = json.loads(df_json)
@@ -128,20 +123,20 @@ def get_data1(request):
             # food_num = [0.4, 6.25, 1.45, 0.04, 1, 1, 0.33, 0.07, 0.33, 1]
             food_num = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
             
-
             # 考慮水果數量，將現有營養素串列與建議營養素串列相除得到百分比(目前值/建議值)
             data = [[(a / b) * food_num[i] * 100 for a, b in zip(json_data[i], json_data[10])] for i in range(10)]
 
             lack_data=[100-data[0][j] for j in range(len(data[0]))]
             
-            print("data",data[0])
-            print("lack-data",lack_data)
+            #print("data",data[0])
+            #print("lack-data",lack_data)
 
             content = {
                 'data': data,
+                'lack_data':lack_data,
                 'labels': labels,
             }
-                        
+            lack_nut(content)
             return JsonResponse(content)
 
         elif name == "19-30":
@@ -153,42 +148,101 @@ def get_data1(request):
                                    zip(json_data[i], json_data[11])]
                 data.append(data_percentage)
 
+            lack_data=[100-data[0][j] for j in range(len(data[0]))]
+
             content = {
                 'data': data,
+                'lack_data':lack_data,
                 'labels': labels,
             }
-
+            lack_nut(content)
             return JsonResponse(content)
 
         else:
             print("no data")
-    # if request.method == "GET":
-    #     return print("It's get")
+
+# 資料庫儲存
+def sql(dict_data):
+    df = pd.DataFrame(columns=["date","青江白菜","蘆筍","奇異果","西瓜","草菇","溼香菇","火龍果","甘藍","竹筍","香蕉",])
+    try:
+        # 連接資料庫
+        db_data = 'mysql+pymysql://root:123456@localhost:3306/fullpagedb?charset=utf8mb4'
+        engine = create_engine(db_data)
+        print("成功連結")
+
+        # 插入資料
+        df = df.append(dict_data, ignore_index=True)
+        df.to_sql(name = 'fruit_table',  
+            con = engine,
+            if_exists = 'append',
+            index = False,
+        )
+        print("成功insert")
+    except Exception as ex:
+        print("問題發生:",ex)
+    #print(df)
+
+# 傳至line notify
+def line_note(dict_data):
+    # 取出value為非0值的key
+    data_kv = {k:v for k,v in dict_data.items() if v!='0'}
+    data_time = data_kv['date']
+
+    # 刪除時間欄位
+    del data_kv['date']
+
+    # 將取用的蔬果加入換行符號，line排版用
+    data_item=[item[0]+str(eval(item[1])*100)+'g' for item in data_kv.items()]
+    pri_list ="\n".join(data_item)
+
+    # 向line notify 推撥
+    n_text='\n時間 : '+str(data_time)+'\n已取用 :\n'+ pri_list
+    line_notify.lineNotifyMessage(n_text)
+    print('update to line')
+    return
+
+
+# 缺乏營養素
+def lack_nut(data):
+    # 載入csv
+    df = pd.read_csv("./食物營養素.csv", index_col="name") 
+    # df按照列轉json
+    df_json = df.to_json(orient="values", force_ascii=False)
+    json_data = json.loads(df_json)
+    # 載入營養素欄位
+    labels = df.columns[1:12]  
+    # 得到取出的蔬果數量並轉list
+    del data['date']
+    food_num = list(data.values())
+
+    # data = []
+    # for i in range(10):
+    #     data_percentage = [(a / b) * food_num[i] * 100 for a, b in
+    #                         zip(json_data[i], json_data[11])]
+    #     data.append(data_percentage)
 
 
 
 
 
+
+
+# 傳輸資料 & 計算營養數 
 def get_num(request):
+    if request.is_ajax() and request.method == "POST":
+        dict_data = request.POST.get("dict")
 
-    headers = {
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.61 Safari/537.36"
-    }
+        # 匯入sql
+        sql(json.loads(dict_data))
 
-    #測試用lask api，需開啟自己的api
-    url_price = "http://127.0.0.1:8000/#price"
-    
-    res_get = requests.get(url_price, headers=headers)  # 使用回傳的資料進行另一網路的request post，資料以json格式傳送
-    
-    soup = BeautifulSoup(res_get.text, 'html.parser')
-    
-   
-    num = soup.select('li#num1')[0].text
-    #num = soup.select('label')[0].text
-    print('get num:',num)
-    
-    num_json = {'name':num,'data':'ddddd'}
-    return JsonResponse(num_json)  # 同等於return HttpResponse(json.dumps(json_data))
+        # line通知
+        line_note(json.loads(dict_data))
+
+        # 計算營養數 
+        lack_nut(json.loads(dict_data))
+
+
+    return JsonResponse({"ddddd":"data"})  # 同等於return HttpResponse(json.dumps(json_data))
  
 
 
