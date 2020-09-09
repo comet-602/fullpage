@@ -31,16 +31,16 @@ def pagelist(request):
 def photo(request):
 
     #webcam的api
-    #url = "http://10.120.26.222:5000/snapshot"
-
+    url = "http://10.120.26.222:5000/snapshot"
+    print(url)
     #測試用flask api，需開啟自己的api
-    url = "http://127.0.0.1:5000/"
+    #url = "http://127.0.0.1:5000/"
 
     headers = {
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.89 Safari/537.36"}
     res = requests.get(url, headers=headers)  # 取得影像的api，獲得影像擷取的url
     json_data = json.loads(res.text)   # flask api 回傳的資料
-    # print("第一次:", json_data)
+    print("第一次:", json_data)
     return JsonResponse(json_data)
 
 # 預測路徑
@@ -110,7 +110,7 @@ def get_data(request, *args, **kwargs):
 #     return 
 
 # 目前營養素
-def get_data1(request, *args, **kwargs):
+def get_data1(request):
     df = pd.read_csv("./食物營養素.csv",index_col="name")  # 讀取csv並指定name欄位為索引值
     df_json = df.to_json(orient="values",force_ascii=False)  # 將dataframe轉為json格式
     json_data = json.loads(df_json)
@@ -133,10 +133,9 @@ def get_data1(request, *args, **kwargs):
 
             content = {
                 'data': data,
-                'lack_data':lack_data,
                 'labels': labels,
             }
-            lack_nut(content)
+            
             return JsonResponse(content)
 
         elif name == "19-30":
@@ -152,10 +151,9 @@ def get_data1(request, *args, **kwargs):
 
             content = {
                 'data': data,
-                'lack_data':lack_data,
                 'labels': labels,
             }
-            lack_nut(content)
+            
             return JsonResponse(content)
 
         else:
@@ -199,31 +197,55 @@ def line_note(dict_data):
     n_text='\n時間 : '+str(data_time)+'\n已取用 :\n'+ pri_list
     line_notify.lineNotifyMessage(n_text)
     print('update to line')
-    return
+    
 
 
 # 缺乏營養素
-def lack_nut(data):
+def lack_nut(dict_data):
+    
     # 載入csv
     df = pd.read_csv("./食物營養素.csv", index_col="name") 
     # df按照列轉json
     df_json = df.to_json(orient="values", force_ascii=False)
     json_data = json.loads(df_json)
+    #print(json_data)
     # 載入營養素欄位
-    labels = df.columns[1:12]  
-    # 得到取出的蔬果數量並轉list
-    del data['date']
-    food_num = list(data.values())
+    labels = df.columns[1:12]
+    
+    #得到取出的蔬果數量並轉list
+    del dict_data['date']
+    food_num = list(dict_data.values())
+    #print('food_num',food_num)
 
-    # data = []
-    # for i in range(10):
-    #     data_percentage = [(a / b) * food_num[i] * 100 for a, b in
-    #                         zip(json_data[i], json_data[11])]
-    #     data.append(data_percentage)
+    # 標準值乘上取出的數量
+    ans_list=[]
+    for i in range(len(food_num)):
+        ans = ans_list.append([j*int(food_num[i]) for j in json_data[i]])
+    #print(ans_list)
 
+    # list內相加
+    ans_sum = np.sum([ans_list[i] for i in range(10)],axis=0)
+    
+    # list相減(與標準的差值)
+    delt = [x-y for x,y in zip(ans_sum,json_data[10])]
 
+    # 推薦蔬果
+    sug_list = ['青江白菜','火龍果','草菇','竹筍','草菇','青江白菜','竹筍','蘆筍','草菇','香蕉','香蕉']
 
-
+    # 推薦列表
+    lack_list = []
+    need_list = []
+    for i in range(10):
+        if delt[i]<0:
+            lack_list.append(labels[i])
+            need_list.append(sug_list[i])
+    print(lack_list)
+    print(need_list)
+    data_json = {
+        'lack_list':lack_list,
+        'need_list':need_list
+    }
+    return data_json
 
 
 
@@ -231,34 +253,18 @@ def lack_nut(data):
 def get_num(request):
     if request.is_ajax() and request.method == "POST":
         dict_data = request.POST.get("dict")
-
+        print(json.loads(dict_data))
         # 匯入sql
         sql(json.loads(dict_data))
 
         # line通知
         line_note(json.loads(dict_data))
 
-        # 計算營養數 
-        lack_nut(json.loads(dict_data))
+        # # 計算營養數
+        a = lack_nut(json.loads(dict_data))
 
-
-    return JsonResponse({"ddddd":"data"})  # 同等於return HttpResponse(json.dumps(json_data))
+    return  JsonResponse(a)
  
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 # =============================================================================
@@ -289,26 +295,6 @@ def price_pre(request):
             json_data_post = json.loads(res_post.text)
             print(json_data_post)
             return JsonResponse(json_data_post)
-
-
-
-# =============================================================================        
-
-
-
-# def suggest(request):
-
-#     # json_get_d = get_data1(request)
-#     # print('suggest_0:',json_get_d)
-#     # get_suggest = json.loads(json_get_data1.content)
-    
-#     json_get_d = requests.post(get_data1(request))  
-#     print('suggest_0:',json_get_d)
-#     #json_data_post = json.loads(res_post.text)  
-#     # print('suggest_first:',get_suggest[0])
-#     # print('suggest_two:',get_suggest)
-
-#     return JsonResponse({"name":"hahahahah"})
 
 
 

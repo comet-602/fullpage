@@ -8,7 +8,7 @@
 		<link rel="stylesheet" type="text/css" href="{% static 'css/fullpage.min.css' %}">
 <!--		<link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.min.css' %}">-->
 		<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.css">
-
+		
 		<!--引入自己的css-->
 		<link rel="stylesheet" type="text/css" href="{% static 'css/mypagelist.css' %}">
 		<link rel="stylesheet" type="text/css" href="{% static 'css/mypagelist1.css' %}">
@@ -29,6 +29,7 @@
 
 		<!--引入自己的js-->
 		<script type="text/javascript" src="{% static 'js/mypagelist.js' %}"></script>
+		
 	</head>
 
 	<body>
@@ -38,14 +39,16 @@
 			<li data-menuanchor="video1"class="menuList"><a href="#video1">影像辨識</a></li>
 			<li data-menuanchor="price" class="menuList"><a href="#price">營養素推薦</a></li>
 			<li data-menuanchor="other" class="menuList"><a href="#other">價格預測</a></li>
-			<li data-menuanchor="member"class="menuList"><a href="#member">未知項目</a></li>
+			<!-- <li data-menuanchor="member"class="menuList"><a href="#member">未知項目</a></li> -->
 		</ul>
 
 
 		<div id="fullpage">
 
 			<div class="section section1">
-				<div id="title_text">標題名稱是叫甚麼</div>
+				
+				<div id="text3d">(◕︿◕✿)<br>Agrifrigerator+<br> ლ(･ ิω･ิლ)</div>
+
 			</div>
 
 			<div class="section section2 " >
@@ -64,6 +67,8 @@
 				<button type="button" id='s2_show_img_id'>擷取圖片</button>
 				<button type="button" id='s2_show_predic_id'>預測狀況</button>
 				<div id="img_log" style="overflow:auto"></div>
+
+				<div id="s2_background"></div>
 			</div>
 
 			<div class="section section3" id="sec3">
@@ -224,4 +229,5 @@
 <script type="text/javascript" src="{% static 'js/mypagelist2.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/mypagelist3.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/mypagelist4.js' %}"></script>
+
 

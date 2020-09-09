@@ -1198,6 +1198,7 @@ function get_num(){
             continue
         } else {
             $("#s3_suggest_update").append(window[`get_label${i}`]+'&nbsp'+parseInt(window[`get_num${i}`])*100+'&nbsp'+'克'+'<br>');
+            $("#s3_suggest_get").html("");
             num_dict_out[window[`get_label${i}`]] = window[`get_num${i}`]
         }
     };
@@ -1207,7 +1208,7 @@ function get_num(){
 };
 
 // 傳送後端
-function get_sug(dict_data){
+function get_num_sug(dict_data){
     $.ajax({
         method: 'POST',
         url: 'get_num',
@@ -1217,6 +1218,13 @@ function get_sug(dict_data){
         dataType: 'json',
         success: function(data){
             console.log('i get:',data)
+            $(function(){
+                $("#s3_suggest_button2").click(function() {
+                    $("#s3_suggest_get").html("");
+                    $("#s3_suggest_get").append('你缺乏:'+'<br>'+data.lack_list+'<br>'+'<br>'+'你需要更多:'+'<br>'+data.need_list)
+                });
+            });
+            
         },
         error: function(error_data){
             console.log('error');
@@ -1228,8 +1236,7 @@ function get_sug(dict_data){
 $(function(){
     $("#s3_suggest_button1").click(function() {
         dict_data = get_num()
-        get_sug(dict_data);
+        get_num_sug(dict_data);
     });
 });
-
 
