@@ -12,11 +12,11 @@ function get_price(fruit_type){
             $("#sec4_box4").attr("src", data.pre_img_url_y);
             $("#sec4_box5").attr("src", data.pre_img_url_t);
             $("#sec4_pre1").html("");  
-            $("#sec4_pre1").append("預測值為:" + data.price1);
+            $("#sec4_pre1").append("明日預測價格為:" + data.price1);
             $("#sec4_pre2").html("");  
-            $("#sec4_pre2").append("昨天價格為:" + data.price2);
+            $("#sec4_pre2").append("周平均預測價格為:" + data.price2);
             $("#sec4_pre3").html("");  
-            $("#sec4_pre3").append("今天價格為:" + data.price3);
+            $("#sec4_pre3").append("月平均預測價格為:" + data.price3);
         },
         error: function(error_data){
             console.log('error');

@@ -32,7 +32,7 @@ def photo(request):
 
     #webcam的api
     url = "http://10.120.26.222:5000/snapshot"
-    print(url)
+    #print(url)
     #測試用flask api，需開啟自己的api
     #url = "http://127.0.0.1:5000/"
 
@@ -48,19 +48,20 @@ def photo_post(request):
 
     json_photo = photo(request)
     json_photo_post = json.loads(json_photo.content)
-
+    print(json_photo_post)
     headers = {
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.61 Safari/537.36"
     }
 
     #測試用lask api，需開啟自己的api
-    url_post = "http://127.0.0.1:5000/post"
+    #url_post = "http://127.0.0.1:5000/post"
 
     #遠端預測機台
-    #url_post = "http://10.120.26.240:5000/post"
+    url_post = "http://10.120.26.240:8080/post"
 
     res_post = requests.post(url_post, headers=headers, json=json_photo_post)  # 使用回傳的資料進行另一網路的request post，資料以json格式傳送
     json_data_post = json.loads(res_post.text)  # 得到post後傳回的資料(字串格式)用loads轉字典
+    print(json_data_post)
 
     return JsonResponse(json_data_post)  # 同等於return HttpResponse(json.dumps(json_data))
 
@@ -102,12 +103,6 @@ def get_data(request, *args, **kwargs):
     }
     return JsonResponse(content)
 
-
-
-# def lack_nut(data):
-#     print('lack_nut_1:',data['lack_data'])
-#     print('lack_nut_2:',data['labels'])
-#     return 
 
 # 目前營養素
 def get_data1(request):
@@ -276,7 +271,7 @@ url_post = "http://10.120.26.19:5000/price"
 
 
 #測試用lask api，需開啟自己的api
-# url_post = "http://localhost:5000/price"
+#url_post = "http://10.120.26.21:5000/price"
 headers = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.89 Safari/537.36"
     }
@@ -285,15 +280,16 @@ headers = {
 def price_pre(request):
     if request.is_ajax() and request.method == "POST":
         name = request.POST.get("name")
-        print(name)
+        print("name",name)
         furit_list=["a","b","c","d","e","f","g","h","i","j"]  #設定水果list
 
         # 若post進來的水果有在list內則取出該水果代入
         if name in furit_list:           
             data={"name":name}
+            print(url_post)
             res_post = requests.post(url_post, headers=headers, json=data)
             json_data_post = json.loads(res_post.text)
-            print(json_data_post)
+            print("json_data_post",json_data_post)
             return JsonResponse(json_data_post)
 
 

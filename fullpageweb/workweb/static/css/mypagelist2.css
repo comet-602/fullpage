@@ -1,4 +1,21 @@
+
+/* 分層桌布 */
 #s2_background {
+  background-image:url('../img/123.jpg');
+  background-repeat:no-repeat;
+  /* position:absolute; */
+  top: 8%;
+  width:100%;
+  height:100%;
+  background-position: center;
+  background-size: cover;
+  opacity: 0.4;
+  z-index:0;
+}
+
+
+
+#s2_bottom_background {
   position: absolute;
   bottom: 0%;
   width: 100%;
@@ -16,7 +33,7 @@
   height:288px;
   border-width: 2px;
   border-style: solid;
-
+  background-color: white;
 }
 
 /* 擷取影像位置 */
@@ -28,7 +45,7 @@
   height:288px;
   border-width: 2px;
   border-style: solid;
-  /* background-color: white; */
+  background-color: white;
 }
 
 /* 預測結果影像位置 */
@@ -40,6 +57,7 @@
   height:288px;
   border-width: 2px;
   border-style: solid;
+  background-color: white;
 }
 
 /* 預測結果位置 */
@@ -51,6 +69,7 @@
   height:150px;
   border-width: 2px;
   border-style: solid;
+  background-color: white;
 }
 
 /* 即時影像擷取位置 */
@@ -62,6 +81,7 @@
   height:200px;
   border-width: 2px;
   border-style: solid;
+  background-color: white;
 }
 
 
